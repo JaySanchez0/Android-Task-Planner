@@ -1,5 +1,13 @@
 # 3.2 Android Secure REST API
 
+### Presentado por:
+
+Jeisson G. Sanchez R.
+
+### Enunciado del lab:
+
+[ver](https://github.com/ieti-eci/3.2-android-secure-rest-api)
+
 
 #### Part 1: Launch Activity and Login Activity 
 
