@@ -1,12 +1,14 @@
 package com.taskplanner
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.os.AsyncTask.execute
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.taskplanner.model.User
 import com.taskplanner.service.LoginService
 import com.taskplanner.service.Token
@@ -33,21 +35,25 @@ class LoginActivity : AppCompatActivity(){
         var passwordEdit:EditText = findViewById(R.id.editTextTextPassword)
         var user = User(emailEdit.text.toString(),passwordEdit.text.toString())
         executorService.execute {
-            login(user)
+            login(user,view)
         }
     }
 
-    fun login(user:User){
+    @SuppressLint("ResourceAsColor")
+    fun login(user:User, view: View){
         var token:Token? = loginService.getToken(user).execute().body()
-        var shared = getSharedPreferences( getString( R.string.preference_file_key ), Context.MODE_PRIVATE )
-        var editor = shared.edit()
         if(token!=null) {
+            var shared = getSharedPreferences( getString( R.string.preference_file_key ), Context.MODE_PRIVATE )
+            var editor = shared.edit()
             editor.putString("TOKEN_KEY",token.accessToken);
             editor.commit()
             println("------------ Token -------"+token.accessToken)
             var intent = Intent(this,MainActivity::class.java)
             startActivity(intent)
             finish()
+        }else{
+            Snackbar.make(view, "Verifique su usuario y contraseña no se ha podido iniciar sesion.", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
         }
     }
 
